@@ -1,14 +1,21 @@
-FROM nginx:alpine
+# Use an official Python runtime as a parent image
+FROM python:3.9-slim
 
-# Remove default nginx website
-RUN rm -rf /usr/share/nginx/html/*
+# Set the working directory in the container
+WORKDIR /app
 
-# Copy our custom HTML file to the nginx directory
-COPY index.html /usr/share/nginx/html/index.html
+# Copy the current directory contents into the container at /app
+COPY . /app
 
-# Expose port 80 to the outside world
-EXPOSE 80
+# Install any needed dependencies specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Start nginx server
-CMD ["nginx", "-g", "daemon off;"] > Dockerfile
+# Make port 8080 available to the world outside this container
+EXPOSE 8080
+
+# Define environment variable
+ENV NAME="World"
+
+# Run the Python application
+CMD ["python", "app.py"]
 
